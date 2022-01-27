@@ -14,9 +14,6 @@ export class Parallel {
   async jobs(...args: argsPromise[]): Promise<number[]> {
     const jobs = [...args];
     const jobsCount = args.length;
-    console.log("jobs", jobs);
-    console.log("args", args);
-    console.log("jobsCount", jobsCount);
 
     return new Promise((resolve) => {
       if (this.threads > jobsCount) {
@@ -27,12 +24,10 @@ export class Parallel {
 
       const chain = (): void => {
         const currentJob = jobs.shift();
-        console.log("currentJob", currentJob);
         if (currentJob) {
           currentJob()
             .then((value) => {
               this.result.push(value);
-              console.log("result", this.result);
               if (this.result.length === jobsCount) {
                 return resolve(this.result);
               }
@@ -44,7 +39,6 @@ export class Parallel {
       };
 
       for (let i = 0; i < this.threads; i++) {
-        console.log("for");
         chain();
       }
     });
